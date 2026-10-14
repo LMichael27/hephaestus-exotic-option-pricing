@@ -39,7 +39,7 @@ It also covers six path-dependent payoffs:
 | `Creating_Neural_Network_Heston_final.ipynb` | Network training and evaluation under Heston |
 | `Creating_Neural_Network_Bates_final.ipynb` | Network training and evaluation under Bates |
 | `Creating_Neural_Network_Heston.ipynb` | Earlier, simpler baseline for Heston (smaller network, no batch normalization) |
-| `exotic_mc_dataset_*.parquet` | Generated dataset with 10,000 priced contracts |
+| `exotic_mc_dataset_*.parquet` | Generated dataset with 10,000 priced contracts. `_2` is an identical copy of `_1`, so the notebooks use only `_1` |
 | `exotic_mc_dataset_meta_*.json` | Generation settings: Monte Carlo configuration and parameter ranges |
 | `Paper.pdf` | Project report |
 
@@ -64,7 +64,7 @@ A parameter that does not apply to the row's model is stored as `NaN`.
 ## Neural network
 
 The network is a fully connected regressor written in PyTorch.
-- **Inputs:** the model parameters and a one-hot encoding of the option type, standardized with `StandardScaler`.
+- **Inputs:** the model and contract parameters and a one-hot encoding of the option type, standardized with `StandardScaler`. The Monte Carlo standard error (`stderr`) is not used as an input, because it is only known after running the simulation.
 - **Hidden layers:** Linear, BatchNorm, GELU and Dropout, with widths 128 → 128 → 64 → 32, followed by a linear output.
 - **Training:** MSE loss with AdamW (lr 1e-3), a `ReduceLROnPlateau` scheduler and early stopping on validation loss.
 - **Data split:** 70 % train, 15 % validation, 15 % test.
